@@ -1,0 +1,38 @@
+{
+  "name": "supabase-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "supabase:generate-types": "bunx supabase gen types typescript --local --schema public > types/database.ts",
+    "supabase:generate-migration": "bunx supabase db diff | bunx supabase migration new",
+    "supabase:generate-seed": "bunx supabase db dump --data-only -f supabase/seed.sql"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.3.0",
+    "@supabase/supabase-js": "^2.43.4",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.381.0",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
+  }
+}
