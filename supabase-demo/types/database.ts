@@ -11,27 +11,32 @@ export type Database = {
     Tables: {
       posts: {
         Row: {
-          body: string | null
+          body: string
           createdAt: string
           id: number
-          updatedAt: string | null
-          userId: string | null
+          userId: string
         }
         Insert: {
-          body?: string | null
+          body?: string
           createdAt?: string
           id?: number
-          updatedAt?: string | null
-          userId?: string | null
+          userId?: string
         }
         Update: {
-          body?: string | null
+          body?: string
           createdAt?: string
           id?: number
-          updatedAt?: string | null
-          userId?: string | null
+          userId?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

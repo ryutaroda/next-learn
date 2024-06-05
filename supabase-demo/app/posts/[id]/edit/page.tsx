@@ -8,11 +8,11 @@ export default async function Page({
     id: string
   }
 }) {
-  const postId = Number(id);
-  const post = await getPost(postId);
+  const post = await getPost(Number(id));
+
   return (
     <div>
-      <Form defaultValues={post} />
+      <Form defaultValues={post || undefined} />
     </div>
   )
 }

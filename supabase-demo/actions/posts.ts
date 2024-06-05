@@ -3,10 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 
 export const createPost = async (body: string) => {
-  // 1秒まつ
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const supabase = createClient();
-
   const {data: {user}} = await supabase.auth.getUser();
 
   if(!body) {
@@ -23,30 +20,32 @@ export const createPost = async (body: string) => {
 
 }
 
-export const updatePost = async (id: number,body: string) => {
-  // 1秒まつ
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+export const updatePost = async (id: number, body: string) => {
   const supabase = createClient();
 
-  const {data: {user}} = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if(!body) {
-    throw new Error('Invalid body');
+  if (!body) {
+    throw new Error('Body is required');
   }
 
   if (!user) {
     throw new Error('Unauthorized');
   }
 
-  return supabase.from('posts')
-  .update({body, 'userId': user.id})
-  .eq('id', id);
-
-}
+  return supabase
+    .from('posts')
+    .update({
+      body,
+      userId: user.id,
+    })
+    .eq('id', id);
+};
 
 export const deletePost = async (id: number) => {
   const supabase = createClient();
-
   const {data: {user}} = await supabase.auth.getUser();
 
   if (!user) {

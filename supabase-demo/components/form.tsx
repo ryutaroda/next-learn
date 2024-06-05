@@ -36,13 +36,12 @@ export default function FormComponent({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || {
-      body: undefined as string | undefined,
+      body: '',
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (defaultValues) {
-      console.log(values.body)
       return updatePost(defaultValues.id, values.body).then(() => {
         router.refresh();
       });
@@ -55,7 +54,10 @@ export default function FormComponent({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 p-4 border rounded-md bg-muted/30 mt-6"
+      >
         <FormField
           control={form.control}
           name="body"
@@ -70,7 +72,7 @@ export default function FormComponent({
           )}
         />
         <Button disabled={form.formState.isSubmitting}
-          type="submit">Submit</Button>
+          type="submit">送信</Button>
       </form>
     </Form>
   )
