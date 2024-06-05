@@ -9,3 +9,9 @@ export const signInWithPassword = async () => {
     password: 'TxyL84JaeJwC3XZ',
   })
 }
+
+export const signOut = async () => {
+  const supabase = createClient();
+  const { error } = await supabase.auth.signOut();
+}
+

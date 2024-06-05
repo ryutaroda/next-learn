@@ -7,3 +7,9 @@ export const getPosts = async () => {
 
   return posts;
 }
+
+export const getPost = async (id: number) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('posts').select().eq('id', id).single();
+  return data;
+}
