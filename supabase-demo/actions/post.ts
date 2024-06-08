@@ -1,9 +1,20 @@
 'use server'
 
 import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
+
+const formSchema = z.object({
+  body: z
+    .string()
+    .min(1, '入力必須です')
+    .max(50, '最大50文字です'),
+})
 
 export const createPost = async (body: string) => {
   const supabase = createClient();
+
+  formSchema.parse({ body });
+
   const {data: {user}} = await supabase.auth.getUser();
 
   if(!body) {
@@ -41,6 +52,7 @@ export const updatePost = async (id: number, body: string) => {
       body,
       userId: user.id,
     })
+    .eq('userId', user.id)
     .eq('id', id);
 };
 

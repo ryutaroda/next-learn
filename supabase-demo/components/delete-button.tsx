@@ -2,7 +2,7 @@
 
 import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { deletePost } from "@/actions/posts";
+import { deletePost } from "@/actions/post";
 import { useRouter } from "next/navigation";
 
 type Props = {

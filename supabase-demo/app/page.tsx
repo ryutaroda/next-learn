@@ -1,16 +1,18 @@
-import { signInWithPassword } from "@/actions/auth";
-import { deletePost } from "@/actions/posts";
-import { DeleteButton } from "@/components/delete-button";
 import Form from "@/components/form";
-import { Button } from "@/components/ui/button";
-import { currentUser } from "@/data/auth";
-import { getPosts } from "@/data/posts";
-import { format } from "date-fns";
-import { Delete, Edit, Trash } from "lucide-react";
-import Link from "next/link";
+import { currentUser } from "@/datas/auth";
+import { getPosts } from "@/datas/post";
+import PostCard from "@/components/post-card";
 
-export default async function Home() {
-  const posts = await getPosts();
+export default async function Home({
+  searchParams: {
+    keyword
+  }
+}: {
+  searchParams: {
+    keyword?: string
+  }
+}) {
+  const posts = await getPosts(keyword);
   const user = await currentUser();
 
   if (!posts) {
@@ -21,25 +23,25 @@ export default async function Home() {
     <main className="container max-w-2xl">
       {user && <Form />}
 
-      <div className="space-y-2 container my-6">
-        {
-          posts.map((post) => (
-            <div className="p-4 border rounded shadow-sm" key={post.id}>
-              <h2>{post.body}</h2>
-              <p>{format(post.createdAt, 'yyyy/MM/dd')}</p>
-              <div className="pt-0 mt-4 bg-muted text-muted-foreground border-t  flex gap-2">
-                <DeleteButton postId={post.id} />
-                <Button size="icon" variant="ghost">
-                  <Link href={`/posts/${post.id}/edit`}>
-                    <Edit size={16} />
-                    <span className="sr-only">編集</span>
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          ))
-        }
-      </div>
+      {posts.length > 0 ? (
+        <div className="space-y-2 my-6">
+          {
+            posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))
+          }
+        </div>
+      ) : (
+        keyword ? (
+          <p className="text-muted-foreground text-center my-10">
+            {keyword} に該当する記事はありません
+          </p>
+        ) : (
+          <p className="text-muted-foreground text-center my-10">
+            記事はありません
+          </p>
+        )
+      )}
 
     </main>
   );

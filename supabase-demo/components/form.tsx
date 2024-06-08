@@ -1,6 +1,6 @@
 'use client';
 
-import { createPost, updatePost } from "@/actions/posts";
+import { createPost, updatePost } from "@/actions/post";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -21,10 +21,10 @@ import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
 import { Tables } from "@/types/database";
 import { log } from "console";
-
+import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
-  body: z.string().min(1).max(50),
+  body: z.string().min(1, '入力必須です').max(50, '最大50文字です'),
 })
 
 export default function FormComponent({
@@ -34,20 +34,40 @@ export default function FormComponent({
 }) {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: 'onChange',
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || {
       body: '',
     },
   });
+  const { toast } = useToast()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (defaultValues) {
       return updatePost(defaultValues.id, values.body).then(() => {
         router.refresh();
+        toast({
+          title: "更新しました！",
+        });
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "更新に失敗しました",
+        });
       });
     } else {
       return createPost(values.body).then(() => {
         router.refresh();
+        toast({
+          title: "作成しました！",
+        });
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "作成に失敗しました",
+        });
       });
     }
   }
@@ -71,7 +91,7 @@ export default function FormComponent({
             </FormItem>
           )}
         />
-        <Button disabled={form.formState.isSubmitting}
+        <Button disabled={form.formState.isSubmitting || !form.formState.isValid}
           type="submit">送信</Button>
       </form>
     </Form>

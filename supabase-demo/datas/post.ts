@@ -1,9 +1,18 @@
 import { createClient } from '@/lib/supabase/server';
 import 'server-only';
 
-export const getPosts = async () => {
+export const getPosts = async (keyword? : string) => {
   const supabase = createClient();
-  const { data: posts, error } = await supabase.from('posts').select('*').order('createdAt', { ascending: false });
+  let query = supabase
+  .from('posts')
+  .select('*')
+  .order('createdAt', { ascending: false });
+
+  if (keyword) {
+    query = query.like('body', `%${keyword}%`);
+  }
+
+  const { data: posts, error } = await query;
 
   return posts;
 }

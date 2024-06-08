@@ -1,5 +1,5 @@
 import Form from "@/components/form"
-import { getPost } from "@/data/posts";
+import { getPost } from "@/datas/post";
 
 export default async function Page({
   params: { id },
@@ -11,7 +11,7 @@ export default async function Page({
   const post = await getPost(Number(id));
 
   return (
-    <div>
+    <div className="container max-w-2xl">
       <Form defaultValues={post || undefined} />
     </div>
   )
