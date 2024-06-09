@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { currentUser } from "@/datas/auth";
 import Link from "next/link";
 import SearchForm from "./search-form";
+import { ModeToggle } from "./mode-toggle";
 
 export default async function Header() {
   const user = await currentUser();
@@ -12,16 +13,22 @@ export default async function Header() {
 
       <SearchForm />
 
-      {user ?
-        <form action={signOut}>
-          <Button variant={"outline"} type="submit">ログアウト</Button>
-        </form>
-        :
-        <form action={signInWithPassword}>
-          <Button type="submit">ログイン</Button>
-        </form>
-      }
+      <div className="flex">
+        {user ?
+          <form action={signOut}>
+            <Button variant={"outline"} type="submit">ログアウト</Button>
+          </form>
+          :
+          <form action={signInWithPassword}>
+            <Button type="submit">ログイン</Button>
+          </form>
+        }
 
+        <div className="ml-2">
+          <ModeToggle />
+        </div>
+
+      </div>
     </header>
   )
 }
