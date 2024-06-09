@@ -1,5 +1,5 @@
+'use client';
 
-import { DeleteButton } from "@/components/delete-button";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { Edit, EllipsisVertical, Trash } from "lucide-react";
@@ -15,11 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { deletePost } from "@/actions/post";
-import { revalidatePath } from "next/cache";
-import { toast } from "./ui/use-toast";
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation";
 
 
 export default function PostCard({ post } :{post: Tables<'posts'>}) {
+  const { toast } = useToast();
+  const router = useRouter();
   return (
     <div className="p-4 border flex rounded shadow-sm" key={post.id}>
       <div className="flex-1">
@@ -47,11 +49,11 @@ export default function PostCard({ post } :{post: Tables<'posts'>}) {
             <DropdownMenuItem className="gap-2" asChild>
               <button
                 formAction={async () => {
-                  'use server';
-
                   await deletePost(post.id);
-
-                  revalidatePath('/');
+                  router.refresh();
+                    toast({
+                      title: "削除しました！",
+                    });
                 }}
                 type="submit"
               >
